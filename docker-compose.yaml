@@ -1,0 +1,67 @@
+version: '3.1'
+
+services:
+
+  frontend:
+    image: aflores89/casaviano_frontend
+    restart: always
+    user: root
+    ports:
+      - "8080:80"
+    environment:
+      API_INTERNAL_HOST: http://backend:3000/api/v1
+
+  backend:
+    image: aflores89/casaviano_backend
+    restart: always
+    ports:
+      - "3000:3000"
+    environment:
+      MONGO_HOST: mongo
+      MONGO_PORT: 27017
+      MONGO_USER: root
+      MONGO_PASSWORD: example
+      MONGO_DATABASE: casaviano
+      NOTIFICATION_EMAIL_PASSWORD: btpepzytqpzzwlko
+      NOTIFICATION_EMAIL_FROM: casaviano.web@gmail.com
+      JWT_SECRET: 1qaz2wsx
+      JWT_ISSUER: CasaViano
+      AWS_S3_ACCESS_KEY_ID: DO006M7KCK23379UU8KG
+      AWS_S3_SECRET_KEY: 96hCH03d7+YncfR2MDC+99/y0s1y+X2EfCCMMkcPuPE
+      AWS_S3_IMAGE_BUCKET_NAME: casaviano
+      AWS_S3_IMAGE_ACL: public-read
+      AWS_S3_IMAGE_ENDPOINT: https://casaviano.fra1.digitaloceanspaces.com/
+      AWS_S3_IMAGE_REGION: us-east-1
+
+  mongo:
+    image: mongo:latest
+    restart: always
+    ports:
+      - "27017:27017"
+    environment:
+      MONGO_INITDB_ROOT_USERNAME: root
+      MONGO_INITDB_ROOT_PASSWORD: example
+    volumes:
+      - mongo_data:/data/db
+
+  mail:
+    image: bytemark/smtp
+    restart: always
+    environment:
+      RELAY_HOST: smtp-relay.gmail.com
+      RELAY_PORT: 587
+      RELAY_USERNAME: casaviano.web@gmail.com
+      RELAY_PASSWORD: casaviano2023
+
+  portainer:
+    image: portainer/portainer-ce:latest
+    restart: unless-stopped
+    ports:
+      - "9443:9443"
+    volumes:
+      - portainer_data:/data
+      - /var/run/docker.sock:/var/run/docker.sock
+
+volumes:
+  mongo_data:
+  portainer_data:
