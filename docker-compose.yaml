@@ -1,15 +1,14 @@
-version: '3.1'
-
 services:
-
   frontend:
     image: aflores89/casaviano_frontend
     restart: always
     user: root
     ports:
-      - "8080:80"
+      - "80:80"
     environment:
       API_INTERNAL_HOST: http://backend:3000/api/v1
+    volumes:
+      - ./frontend-patches/.next/server/pages/index.js:/app/.next/server/pages/index.js:ro
 
   backend:
     image: aflores89/casaviano_backend
