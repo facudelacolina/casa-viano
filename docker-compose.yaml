@@ -4,7 +4,7 @@ services:
     restart: always
     user: root
     ports:
-      - "80:80"
+      - "8080:80"
     environment:
       API_INTERNAL_HOST: http://backend:3000/api/v1
     volumes:
